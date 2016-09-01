@@ -1,0 +1,12 @@
+{
+  "name"         : "sarc-crawler",
+  "version"      : "0.0.1",
+  "description"  : "Find your classes.",
+  "main"         : "crawler.js",
+  "author"       : "Wakeful Pigs",
+  "dependencies" : {
+    "express"    : "latest",
+    "request"    : "latest",
+    "cheerio"    : "latest"
+  }
+}
