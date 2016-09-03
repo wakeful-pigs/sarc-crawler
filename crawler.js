@@ -1,16 +1,32 @@
-var request = require('request');
-var cheerio = require('cheerio');
+const request = require('request');
+const cheerio = require('cheerio');
 
-url = 'http://sarc.pucrs.br/Default/';
+const URL = 'http://sarc.pucrs.br/Default/';
 
-request(url, function(error, response, html){
-  if(!error) {
-    var $ = cheerio.load(html);
+let requestHandler = (err, response, html) => {
+	if(err)
+		throw err;
 
-    var children = $('.ms-btoolbar').children()
-    for (i = 0; i < children.length; i++) {
-       console.log(children.eq(i).text().trim());
-    }
-  }
+	let statusCode = response.statusCode;
+	if(statusCode !== 200)
+		throw `Error ${statusCode}`;
 
-})
+	let $ = cheerio.load(html);
+	let disciplinas = $('.ms-btoolbar').children();
+	let horarios    = $('#ctl00_cphTitulo_UpdatePanel2' + '> div' + '> table')
+		.find('.ms-bigcaption');
+
+	for (let i = 0, l = horarios.length; i < l; i++) {
+		let horario = horarios[i];
+		if (horario.children.length !== 0) {
+			console.log(horario.children[0].data);
+		}
+	}
+
+	for (let i = 0, l = disciplinas.length; i < l; i+=3) {
+		let disciplina = children.eq(i);
+		console.log(disciplina.text().trim(), children.eq(i+1).text().trim(), children.eq(i+2).text().trim());
+	}
+
+}
+request(URL, requestHandler);
