@@ -11,22 +11,19 @@ let requestHandler = (err, response, html) => {
 	if(statusCode !== 200)
 		throw `Error ${statusCode}`;
 
-	let $ = cheerio.load(html);
-	let disciplinas = $('.ms-btoolbar').children();
-	let horarios    = $('#ctl00_cphTitulo_UpdatePanel2' + '> div' + '> table')
-		.find('.ms-bigcaption');
+	let $ = cheerio.load(cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2').html());
 
-	for (let i = 0, l = horarios.length; i < l; i++) {
-		let horario = horarios[i];
-		if (horario.children.length !== 0) {
-			console.log(horario.children[0].data);
+	let resources = $('div > table');
+	for (let i = 0, l = resources.length; i < l; i++) {
+		let content = cheerio.load(resources.eq(i).html());
+		let horario = content('span').html();
+		let table_data= content('.ms-btoolbar').children();
+		for (let i = 0, l = table_data.length; i < l; i+=3) {
+			let resource = table_data.eq(i).text().trim();
+			let course   = table_data.eq(i+1).text().trim();
+			let resp     = table_data.eq(i+2).text().trim();
+			console.log(horario, resource, course, resp);
 		}
 	}
-
-	for (let i = 0, l = disciplinas.length; i < l; i+=3) {
-		let disciplina = children.eq(i);
-		console.log(disciplina.text().trim(), children.eq(i+1).text().trim(), children.eq(i+2).text().trim());
-	}
-
 }
 request(URL, requestHandler);
