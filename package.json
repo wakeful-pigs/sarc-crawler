@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Find your classes.",
   "main": "index.js",
+  "scripts": {
+	  "start": "node index.js"
+  },
   "author": "Wakeful Pigs",
   "dependencies": {
     "cheerio": "^0.22.0",
