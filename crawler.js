@@ -1,29 +1,31 @@
-const request = require('request');
-const cheerio = require('cheerio');
+module.exports = function crawler(callback) {
+	const request = require('request');
+	const cheerio = require('cheerio');
 
-const URL = 'http://sarc.pucrs.br/Default/';
+	const URL = 'http://sarc.pucrs.br/Default/';
 
-let requestHandler = (err, response, html) => {
-	if(err)
-		throw err;
+	var data = {};
+	let requestHandler = (err, response, html) => {
+		if(err) return callback(err);
 
-	let statusCode = response.statusCode;
-	if(statusCode !== 200)
-		throw `Error ${statusCode}`;
+		let $ = cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2 > div > table');
 
-	let $ = cheerio.load(cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2').html());
-
-	let resources = $('div > table');
-	for (let i = 0, l = resources.length; i < l; i++) {
-		let content = cheerio.load(resources.eq(i).html());
-		let horario = content('span').html();
-		let table_data= content('.ms-btoolbar').children();
-		for (let i = 0, l = table_data.length; i < l; i+=3) {
-			let resource = table_data.eq(i).text().trim();
-			let course   = table_data.eq(i+1).text().trim();
-			let resp     = table_data.eq(i+2).text().trim();
-			console.log(horario, resource, course, resp);
+		for (let i = 0, l = $.length; i < l; i++) {
+			let content   = cheerio.load($.eq(i).html());
+			let horario   = content('span').html();
+			let table_data= content('.ms-btoolbar').children();
+			let details = [];
+			for (let j = 0, l = table_data.length; j < l; j+=3) {
+				let detail = {
+					'resource' : table_data.eq(j).text().trim(),
+					'course'   : table_data.eq(j+1).text().trim(),
+					'owner'    : table_data.eq(j+2).text().trim()
+				};
+				details.push(detail);
+			}
+			data[horario] = details;
 		}
+		callback(null, data);
 	}
+	request(URL, requestHandler);
 }
-request(URL, requestHandler);
