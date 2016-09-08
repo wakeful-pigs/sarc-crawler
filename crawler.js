@@ -11,9 +11,9 @@ module.exports = function crawler(callback) {
 		let $ = cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2 > div > table');
 
 		for (let i = 0, l = $.length; i < l; i++) {
-			let content   = cheerio.load($.eq(i).html());
-			let horario   = content('span').html();
-			let table_data= content('.ms-btoolbar').children();
+			let content    = cheerio.load($.eq(i).html());
+			let horario    = content('span').html();
+			let table_data = content('.ms-btoolbar').children();
 			let details = [];
 			for (let j = 0, l = table_data.length; j < l; j+=3) {
 				let detail = {
