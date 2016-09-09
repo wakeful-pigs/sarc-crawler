@@ -12,7 +12,7 @@ module.exports = function crawler(callback) {
 
 		for (let i = 0, l = $.length; i < l; i++) {
 			let content    = cheerio.load($.eq(i).html());
-			let horario    = content('span').html();
+			let time       = content('span').html();
 			let table_data = content('.ms-btoolbar').children();
 			let details = [];
 			for (let j = 0, l = table_data.length; j < l; j+=3) {
@@ -23,9 +23,15 @@ module.exports = function crawler(callback) {
 				};
 				details.push(detail);
 			}
-			data[horario] = details;
+			time = formatTime(time);
+			data[time] = details;
 		}
 		callback(null, data);
 	}
 	request(URL, requestHandler);
+}
+
+function formatTime(time) {
+	var weekday = new Date().getDay() + 1
+	return weekday + time
 }
