@@ -24,7 +24,9 @@ module.exports = function crawler(callback) {
 				details.push(detail);
 			}
 			time = formatTime(time);
-			data[time] = details;
+			if (details.length > 0) {
+				data[time] = details;
+			};
 		}
 		callback(null, data);
 	}
