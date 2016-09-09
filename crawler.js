@@ -4,7 +4,7 @@ module.exports = function crawler(callback) {
 
 	const URL = 'http://sarc.pucrs.br/Default/';
 
-	var data = {};
+	var data = [];
 	let requestHandler = (err, response, html) => {
 		if(err) return callback(err);
 
@@ -14,19 +14,15 @@ module.exports = function crawler(callback) {
 			let content    = cheerio.load($.eq(i).html());
 			let time       = content('span').html();
 			let table_data = content('.ms-btoolbar').children();
-			let details = [];
 			for (let j = 0, l = table_data.length; j < l; j+=3) {
 				let detail = {
+					'time'     : formatTime(time),
 					'resource' : table_data.eq(j).text().trim(),
 					'course'   : table_data.eq(j+1).text().trim(),
 					'owner'    : table_data.eq(j+2).text().trim()
 				};
-				details.push(detail);
+				data.push(detail);
 			}
-			time = formatTime(time);
-			if (details.length > 0) {
-				data[time] = details;
-			};
 		}
 		callback(null, data);
 	}
