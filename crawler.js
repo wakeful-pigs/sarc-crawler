@@ -5,7 +5,8 @@ module.exports = function crawler(callback) {
 	const URL = 'http://sarc.pucrs.br/Default/';
 
 	var data = [];
-	let requestHandler = (err, response, html) => {
+	const format_time = (time) => (new Date().getDay() + 1) + time;
+	const request_handler = (err, response, html) => {
 		if(err) return callback(err);
 
 		let $ = cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2 > div > table');
@@ -16,7 +17,7 @@ module.exports = function crawler(callback) {
 			let table_data = content('.ms-btoolbar').children();
 			for (let j = 0, l = table_data.length; j < l; j+=3) {
 				let detail = {
-					'time'     : formatTime(time),
+					'time'     : format_time(time),
 					'resource' : table_data.eq(j).text().trim(),
 					'course'   : table_data.eq(j+1).text().trim(),
 					'owner'    : table_data.eq(j+2).text().trim()
@@ -26,10 +27,6 @@ module.exports = function crawler(callback) {
 		}
 		callback(null, data);
 	}
-	request(URL, requestHandler);
+	request(URL, request_handler);
 }
 
-function formatTime(time) {
-	var weekday = new Date().getDay() + 1
-	return weekday + time
-}
