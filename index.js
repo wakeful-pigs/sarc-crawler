@@ -1,22 +1,15 @@
-const crawler =  require('./crawler');
+const crawler = require('./crawler');
 const express = require('express');
+const path    = require('path');
+const app = express();
 const PORT = 3000;
 
-//let crawler_handler = (err, data) => {
-	//if(err) throw err;
-	//console.log(data);
-//};
+const root_handler = (req, res) => res.render('index', {title: 'Sarc Crawler'});
 
-//crawler(crawler_handler);
+let listen_handler = () => console.log(`Running at: ${PORT}`);
 
-let root_handler = (req, res) =>{
-	crawler((err, data) => {
-		if(err) throw err;
-		res.send(data);
-	})
-} 
-let listen_handler = () => console.log(`Server running at: ${PORT}`);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-var app = express();
 app.get('/', root_handler);
 app.listen(PORT, listen_handler)
