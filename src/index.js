@@ -1,4 +1,3 @@
-require('babel-polyfill');
 import 'babel-polyfill';
 import express from 'express';
 import crawler from './crawler';

@@ -5,13 +5,12 @@ const URL = 'http://sarc.pucrs.br/Default/';
 const format_time = (time) => (new Date().getDay() + 1) + time;
 
 async function crawler() {
-  let ans = [];
+  const ans = [];
 
   const data = await fetch(URL);
   const html = await data.text();
-  console.log(html);
 
-  let $ = cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2 > div > table');
+  const $ = cheerio.load(html)('#ctl00_cphTitulo_UpdatePanel2 > div > table');
 
   for (let i = 0, l = $.length; i < l; i++) {
     let content    = cheerio.load($.eq(i).html());
