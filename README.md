@@ -5,3 +5,14 @@
 [![Build Status](https://travis-ci.org/wakeful-pigs/sarcim.svg?branch=master)](https://travis-ci.org/wakeful-pigs/sarcim)
 
 A service to provide information on where your classes are.
+
+## setup
+
+```sh
+npm install
+```
+## development
+
+```sh
+npm run dev
+```
