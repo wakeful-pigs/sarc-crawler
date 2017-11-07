@@ -1,16 +1,19 @@
-import 'babel-polyfill';
-import express from 'express';
-import crawler from './crawler';
-import path from 'path';
-import mongoose from 'mongoose';
+import 'babel-polyfill'
+import express from 'express'
+import crawler from './crawler'
+import path from 'path'
+import mongoose from 'mongoose'
 
-const app = express();
-const PORT = 3000;
+const app = express()
+const PORT = 3000
 
-mongoose.connect("mongodb://mongo:27017")
+// mongoose.connect("mongodb://mongo:27017")
 
-const sarc_data = (req, res) => res.send(crawler());
-const listen_handler = () => console.log(`Running at: ${PORT}`);
+const sarcData = async (req, res) => {
+  let data = await crawler()
+  res.send(data)
+}
+const listenHandler = () => console.log(`Running at: ${PORT}`)
 
-app.get('/sarc', sarc_data);
-app.listen(PORT, listen_handler)
+app.get('/sarc', sarcData)
+app.listen(PORT, listenHandler)
